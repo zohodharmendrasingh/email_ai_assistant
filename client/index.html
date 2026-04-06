@@ -72,7 +72,14 @@ body.dark .lane-body{border-color:#2a2a2a}
 .ghost{background:transparent;border:1px solid #dadce0!important}
 .red{background:transparent;border:1px solid #ea4335!important;color:#ea4335}.red:hover{background:#fce8e6}
 .move-dd{position:fixed;border-radius:10px;z-index:99999;box-shadow:0 8px 32px rgba(0,0,0,.35);min-width:220px;max-height:min(400px,calc(100vh - 24px));overflow-y:auto;overflow-x:hidden;isolation:isolate}
-.compose-win{position:fixed;bottom:0;right:20px;width:480px;border-radius:14px 14px 0 0;box-shadow:0 -4px 24px rgba(0,0,0,.18);z-index:1000;display:flex;flex-direction:column;border:1px solid #e0e0e0;border-bottom:none}
+.compose-win{position:fixed;bottom:0;right:20px;width:540px;border-radius:10px 10px 0 0;box-shadow:0 -2px 20px rgba(0,0,0,.22);z-index:1000;display:flex;flex-direction:column;border:1px solid #d0d5dd;border-bottom:none;overflow:hidden}
+.compose-field-row{display:flex;align-items:center;padding:0 16px;border-bottom:1px solid rgba(128,128,128,.12);min-height:38px}
+.compose-field-label{font-size:12px;font-weight:600;color:#888;width:42px;flex-shrink:0;letter-spacing:.01em}
+.compose-field-input{flex:1;border:none;font-size:13px;background:transparent;padding:8px 0;outline:none;line-height:1.4}
+.compose-toolbar{display:flex;align-items:center;gap:1px;padding:6px 12px;border-top:1px solid rgba(128,128,128,.12)}
+.compose-tb-btn{background:none;border:none;cursor:pointer;padding:4px 7px;border-radius:4px;font-size:13px;opacity:.65;transition:opacity .15s,background .15s}
+.compose-tb-btn:hover{opacity:1;background:rgba(128,128,128,.12)}
+.compose-tb-sep{width:1px;height:16px;background:rgba(128,128,128,.25);margin:0 4px}
 .search-bar{width:100%;border:1.5px solid transparent;border-radius:20px;padding:7px 14px 7px 36px;font-size:13px;transition:all .2s}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:center;justify-content:center}
 .modal{border-radius:14px;padding:24px;width:360px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
@@ -81,7 +88,7 @@ body.dark .lane-body{border-color:#2a2a2a}
 @media(max-width:768px){
   .sidebar{position:fixed;left:-200px;top:0;height:100vh;z-index:300;transition:left .25s}
   .sidebar.open{left:0}
-  .compose-win{width:100%;right:0;border-radius:14px 14px 0 0}
+  .compose-win{width:100%;right:0;border-radius:10px 10px 0 0}
   .lane-wrap{min-width:240px;max-width:240px}
   .mobile-overlay{display:block}
 }
@@ -687,28 +694,65 @@ const approveDraft=async()=>{
       {/* Compose */}
       {compose&&(
         <div className="compose-win" style={{animation:"slideup .2s ease"}}>
-          <div style={{padding:"11px 16px",background:"#404040",borderRadius:"14px 14px 0 0",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <span style={{color:"white",fontSize:13,fontWeight:600}}>{composeMode==="reply"?"↩ Reply":"↪ Forward"}</span>
-            <button onClick={()=>setCompose(null)} style={{background:"none",border:"none",color:"#ccc",cursor:"pointer",fontSize:20}}>×</button>
-          </div>
-          <div style={{padding:"0 16px",borderBottom:"1px solid rgba(128,128,128,.15)"}}>
-            <div style={{padding:"8px 0",display:"flex",gap:8,alignItems:"center",borderBottom:"1px solid rgba(128,128,128,.1)"}}>
-              <span style={{fontSize:11,opacity:.5,width:30,flexShrink:0}}>To</span>
-              <input value={composeTo} onChange={e=>setComposeTo(e.target.value)} style={{flex:1,border:"none",fontSize:13,background:"transparent",padding:"2px 0"}} placeholder="Recipients"/>
+          {/* Header */}
+          <div style={{padding:"9px 14px",background:"#2c3e50",display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
+            <div style={{display:"flex",alignItems:"center",gap:6,flex:1}}>
+              <button className="btn blue" onClick={sendCompose} disabled={sending}
+                style={{padding:"5px 18px",borderRadius:4,fontSize:13,fontWeight:600,letterSpacing:.01,minWidth:64}}>
+                {sending?"Sending...":<>✈ Send</>}
+              </button>
+              <button style={{background:"none",border:"1px solid rgba(255,255,255,.25)",color:"rgba(255,255,255,.8)",borderRadius:4,padding:"5px 10px",fontSize:12,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
+                🗂 Archive
+              </button>
+              <button style={{background:"none",border:"1px solid rgba(255,255,255,.25)",color:"rgba(255,255,255,.8)",borderRadius:4,padding:"5px 10px",fontSize:12,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>
+                🕐 Later
+              </button>
             </div>
-            <div style={{padding:"8px 0",display:"flex",gap:8,alignItems:"center"}}>
-              <span style={{fontSize:11,opacity:.5,width:30,flexShrink:0}}>CC</span><input value={composeCC} onChange={e=>setComposeCC(e.target.value)} style={{flex:1,border:"none",fontSize:13,background:"transparent",padding:"2px 0"}} placeholder="CC"/></div><div style={{padding:"8px 0",display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:11,opacity:.5,width:30,flexShrink:0}}>Sub</span>
-              <input value={composeSubj} onChange={e=>setComposeSubj(e.target.value)} style={{flex:1,border:"none",fontSize:13,background:"transparent",padding:"2px 0"}}/>
+            <div style={{display:"flex",alignItems:"center",gap:8}}>
+              <span style={{color:"rgba(255,255,255,.5)",fontSize:11}}>{composeMode==="reply"?"↩ Reply":"↪ Forward"}</span>
+              <button onClick={()=>setCompose(null)} style={{background:"none",border:"none",color:"rgba(255,255,255,.6)",cursor:"pointer",fontSize:18,lineHeight:1,padding:"2px 4px"}} title="Close">×</button>
             </div>
           </div>
+
+          {/* Fields */}
+          <div style={{flexShrink:0}}>
+            <div className="compose-field-row">
+              <span className="compose-field-label">From</span>
+              <span style={{fontSize:13,opacity:.75,padding:"8px 0"}}>Alfonso Mendez &lt;alfonso@metwall.com&gt;</span>
+            </div>
+            <div className="compose-field-row">
+              <span className="compose-field-label">To</span>
+              <input className="compose-field-input" value={composeTo} onChange={e=>setComposeTo(e.target.value)} placeholder="Add recipients"/>
+            </div>
+            <div className="compose-field-row">
+              <span className="compose-field-label">Cc</span>
+              <input className="compose-field-input" value={composeCC} onChange={e=>setComposeCC(e.target.value)} placeholder=""/>
+            </div>
+            <div className="compose-field-row">
+              <span className="compose-field-label">Subject</span>
+              <input className="compose-field-input" value={composeSubj} onChange={e=>setComposeSubj(e.target.value)} style={{fontWeight:500}}/>
+            </div>
+          </div>
+
+          {/* Body */}
           <textarea value={composeBody} onChange={e=>setComposeBody(e.target.value)}
-            style={{border:"none",padding:"12px 16px",fontSize:13,lineHeight:1.7,resize:"none",minHeight:160,background:"transparent"}}
-            placeholder="Write your message..."/>
-          <div style={{padding:"10px 16px",borderTop:"1px solid rgba(128,128,128,.1)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <span style={{fontSize:11,opacity:.45}}>From: alfonso@metwall.com</span>
-            <button className="btn blue" onClick={sendCompose} disabled={sending} style={{padding:"8px 20px",borderRadius:20}}>
-              {sending?"Sending...":composeMode==="reply"?"Send Reply":"Forward"}
-            </button>
+            style={{border:"none",padding:"14px 16px",fontSize:13,lineHeight:1.75,resize:"none",flex:1,minHeight:180,background:"transparent",outline:"none"}}
+            placeholder="Write your message here..."/>
+
+          {/* Formatting toolbar */}
+          <div className="compose-toolbar">
+            {[["B","bold"],["I","italic"],["U","underline"],["S","strikethrough"]].map(([l,c])=>(
+              <button key={c} className="compose-tb-btn" title={c} style={{fontStyle:c==="italic"?"italic":"normal",fontWeight:c==="bold"?"700":"400",textDecoration:c==="underline"?"underline":c==="strikethrough"?"line-through":"none"}}>{l}</button>
+            ))}
+            <div className="compose-tb-sep"/>
+            <button className="compose-tb-btn" title="Bulleted list">≡</button>
+            <button className="compose-tb-btn" title="Numbered list">⋮</button>
+            <div className="compose-tb-sep"/>
+            <button className="compose-tb-btn" title="Link">🔗</button>
+            <button className="compose-tb-btn" title="Image">🖼</button>
+            <button className="compose-tb-btn" title="Emoji">☺</button>
+            <div style={{flex:1}}/>
+            <button className="compose-tb-btn" title="Discard" onClick={()=>setCompose(null)} style={{color:"#ea4335",opacity:.7}}>🗑</button>
           </div>
         </div>
       )}
