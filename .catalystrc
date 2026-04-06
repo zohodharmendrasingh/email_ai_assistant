@@ -1,0 +1,30 @@
+{
+  "defaults": {
+    "project": 1,
+    "env": 1
+  },
+  "actives": {
+    "project": 1,
+    "env": 1
+  },
+  "projects": [
+    {
+      "idx": 1,
+      "id": "35344000000013084",
+      "name": "EmailAIAssistant",
+      "domain": {
+        "id": "10123132729",
+        "name": "emailaiassistant-919781692.development"
+      },
+      "timezone": "America/Adak",
+      "env": [
+        {
+          "idx": 1,
+          "id": "919781692",
+          "name": "Development",
+          "type": 3
+        }
+      ]
+    }
+  ]
+}
