@@ -1,14 +1,16 @@
 // Hardcoded config — replace tokens after running /auth/zoho
 process.env.ANTHROPIC_API_KEY   = process.env.ANTHROPIC_API_KEY   || "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";
-process.env.ZOHO_CLIENT_ID      = process.env.ZOHO_CLIENT_ID      || "1000.9RWBWZOB2K1QUURSC7PO78HIDTVLYC";
-process.env.ZOHO_CLIENT_SECRET  = process.env.ZOHO_CLIENT_SECRET  || "a9dd9c90f3a4d2722dff4712b96da8999ad8841057";
+process.env.ZOHO_CLIENT_ID      = process.env.ZOHO_CLIENT_ID      || "1000.6DD4QP4PCB7OKX7ERC4PAICZURLLKX";
+process.env.ZOHO_CLIENT_SECRET  = process.env.ZOHO_CLIENT_SECRET  || "b9aad1c99e593ec6a65def4f501f285c9f29a9a20f";
 process.env.ZOHO_REDIRECT_URI   = process.env.ZOHO_REDIRECT_URI   || "https://emailaiassistant-919781692.development.catalystserverless.com/server/email_ai_assistant_function/auth/zoho/callback";
 process.env.APP_PASSWORD        = process.env.APP_PASSWORD        || "Metwall2024!";
 // Set these after running /auth/zoho:
-process.env.ZOHO_ACCESS_TOKEN   = process.env.ZOHO_ACCESS_TOKEN   || "1000.f60f41781cdc2f1caf5f1dab635ef304.7420f39571d65eaa21cc6fa0a4cf389a";
-process.env.ZOHO_REFRESH_TOKEN  = process.env.ZOHO_REFRESH_TOKEN  || "1000.c9bad8f2217c9a5c9505bc54ca2fa28b.aa97463026911381f8c96d91953831c5";
-process.env.ZOHO_ACCOUNT_ID     = process.env.ZOHO_ACCOUNT_ID     || "1695791000000008002";
+process.env.ZOHO_ACCESS_TOKEN   = process.env.ZOHO_ACCESS_TOKEN   || "1000.7276a86a184e908177bc155050a10403.9a9affc301219838f9e41bbaf4165c5b";
+process.env.ZOHO_REFRESH_TOKEN  = process.env.ZOHO_REFRESH_TOKEN  || "1000.5d60100a8c9969b90610f969a95d4a30.aaf097583839022b1947f242d52b8b44";
+process.env.ZOHO_ACCOUNT_ID     = process.env.ZOHO_ACCOUNT_ID     || "4862555000000008001";
 
+
+//https://emailaiassistant-919781692.development.catalystserverless.com/app/index.html?access_token=1000.7276a86a184e908177bc155050a10403.9a9affc301219838f9e41bbaf4165c5b&refresh_token=1000.5d60100a8c9969b90610f969a95d4a30.aaf097583839022b1947f242d52b8b44&account_id=4862555000000008001
 import express from "express";
 import cors from "cors";
 import Anthropic from "@anthropic-ai/sdk";
